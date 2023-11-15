@@ -1,4 +1,41 @@
-import type { Config } from 'tailwindcss'
+import type { Config } from "tailwindcss";
+
+const safelistPatterns = [
+  /text-(xs|sm|base|md|lg|xl|2xl|3xl|4xl|5xl|6xl|7xl|8xl|9xl)/,
+  /text-(center|left|right)/,
+
+  /grid.+/,
+  /col-span.+/,
+  /place-.+/,
+  /items-.+/,
+  /justify-.+/,
+
+  /w-.+/,
+  /h-.+/,
+
+  /m-.+/,
+  /mr-.+/,
+  /ml-.+/,
+  /mx-.+/,
+  /my-.+/,
+  /mt-.+/,
+  /mb-.+/,
+  /-mr-.+/,
+  /-ml-.+/,
+  /-mt-.+/,
+
+  /p-.+/,
+  /px-.+/,
+  /py-.+/,
+  /pr-.+/,
+  /pl-.+/,
+  /pt-.+/,
+  /pb-.+/,
+
+  /gap-.+/,
+  /gap-x-.+/,
+  /gap-y-.+/,
+];
 
 const config: Config = {
   content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
@@ -15,5 +52,119 @@ const config: Config = {
     },
   },
   plugins: [],
+  safelist:
+    process.env.NODE_ENV === "production"
+      ? []
+      : [
+          "ml-5",
+          "text-[24px]",
+          "bg-[#003a77]",
+          "bg-[#eb2128]",
+          "group",
+          "ease",
+          "group-focus:max-h-screen",
+          "group-focus:max-h-full",
+          'after:content-["\\276F"]',
+          "lg:px-16",
+          "lg:w-[220px]",
+          "lg:mr-4",
+          "lg:col-span-2",
+          "h-[250px]",
+          "focus:!border-secondary",
+          "focus:bg-[#DEFDFF]",
+          "focus:underline",
+          "focus:underline-offset-[12px]",
+          "focus:decoration-[#00cee2]",
+          "text-secondary-darker",
+          "!-mx-5",
+          "!-mt-6",
+          "border-b-[2px]",
+          "lg:w-[780px]",
+          "lg:w-[810px]",
+          "w-3/5",
+          "text-center",
+          "hidden",
+          "block",
+          "sm:hidden",
+          "md:hidden",
+          "lg:hidden",
+          "sm:block",
+          "md:block",
+          "lg:block",
+          "bg-[#fafafa]",
+          "bg-[#fbf6f2]",
+          "bg-[#f5f5f7]",
+          "bg-[#e7f4e0]",
+          "bg-[#f5f5f7]",
+          "bg-[#cae1ef]",
+          "font-semibold",
+          "font-bold",
+          "font-extrabold",
+          "pr-[25px]",
+          "text-gray-600",
+          { pattern: /max-h-.+/ },
+          { pattern: /ml-.+/ },
+          { pattern: /px-.+/ },
+          { pattern: /w-.+/ },
+          { pattern: /bg-blue.+/ },
+          { pattern: /border-slate.+/ },
+          { pattern: /text-blue.+/ },
+          { pattern: /text-primary.+/ },
+          { pattern: /bg-yellow.+/ },
+          { pattern: /bg-gray.+/ },
+          { pattern: /rounded.+/ },
+          { pattern: /tracking.+/ },
+          "basis-1/2",
+          "basis-1/4",
+          "basis-1/6",
+          "basis-1/8",
+          "md:basis-1/2",
+          "md:basis-1/4",
+          "md:basis-1/6",
+          "md:basis-1/8",
+          "text-white",
+          "text-black",
+          "md:text-white",
+          "md:text-black",
+          "md:float",
+          "border-t",
+          "border-b",
+          "border-l",
+          "md:border",
+          {
+            pattern: /max-h-.+/,
+          },
+          {
+            pattern: /ml-.+/,
+          },
+          {
+            pattern: /px-.+/,
+          },
+          {
+            pattern: /w-.+/,
+          },
+          {
+            pattern: /bg-blue.+/,
+          },
+          {
+            pattern: /border-slate.+/,
+          },
+          {
+            pattern: /text-blue.+/,
+          },
+          {
+            pattern: /text-primary.+/,
+          },
+          {
+            pattern: /bg-yellow.+/,
+          },
+          {
+            pattern: /bg-gray.+/,
+          },
+          ...safelistPatterns.map(safelist => ({
+            pattern: safelist,
+            variants: ["md"],
+          })),
+        ],
 };
-export default config
+export default config;
