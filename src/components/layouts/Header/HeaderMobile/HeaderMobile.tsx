@@ -3,15 +3,17 @@ import Image from "next/image";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { FiSearch } from "react-icons/fi";
 import { AiOutlineHeart } from "react-icons/ai";
-import { HiOutlineUser } from "react-icons/hi";
 import CartIcon from "@/components/icons/CartIcon";
 import UserIcon from "@/components/icons/UserIcon";
+import useDisclosure from "@/hooks/useDisclosure";
+import OverlayMenuMobile from "./OverlayMenuMobile";
 
 const HeaderMobile = () => {
+  const { isOpen, onClose, onOpen } = useDisclosure();
   return (
     <div className="h-[54px] grid grid-cols-3 px-2 bg-white fixed top-0 right-0 w-full">
       <div className="flex items-center">
-        <button className="p-2">
+        <button className="p-2" onClick={onOpen}>
           <GiHamburgerMenu className="w-[22px] h-[22px]" />
           <p className="text-[7px]">MENU</p>
         </button>
@@ -42,6 +44,8 @@ const HeaderMobile = () => {
           </div>
         </div>
       </div>
+
+      {isOpen && <OverlayMenuMobile onClose={onClose} />}
     </div>
   );
 };
