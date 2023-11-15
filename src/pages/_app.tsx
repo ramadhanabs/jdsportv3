@@ -5,6 +5,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import MobileAppLayout from "@/components/layouts/MobileAppLayout";
 
+import "slick-carousel/slick/slick-theme.css";
+import "slick-carousel/slick/slick.css";
+
 export default function App({ Component, pageProps }: AppProps) {
   const { isMobile } = pageProps;
 
