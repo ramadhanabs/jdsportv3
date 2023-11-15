@@ -14,5 +14,7 @@ export type RecursiveDataCategories = {
   show_onmobile_homepage: boolean;
   icon_onmobile_homepage: string;
   icon_menu: string;
+  level: number;
+  parent_id: number;
   children_data: Array<RecursiveDataCategories>;
 };
