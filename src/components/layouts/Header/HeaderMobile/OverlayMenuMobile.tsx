@@ -1,12 +1,12 @@
 import { RecursiveDataCategories, useCategories } from "@/api/Categories";
 import HomeIcon from "@/components/icons/HomeIcon";
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { HiOutlineX, HiChevronRight, HiArrowLeft } from "react-icons/hi";
 import { FaTwitter, FaFacebook } from "react-icons/fa";
 import { BsInstagram } from "react-icons/bs";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { shimmer, toBase64 } from "@/utils/componentUtils";
+import { generateCategoryURL, shimmer, toBase64 } from "@/utils/componentUtils";
 import { useBlocks } from "@/api/Blocks";
 import { twMerge } from "tailwind-merge";
 import ContentLoader from "@/components/elements/ContentLoader";
@@ -20,6 +20,7 @@ interface MenuProps {
   parent: RecursiveDataCategories | null;
   onClick: (menu: RecursiveDataCategories) => void;
   isFirstSubMenu: boolean;
+  listCategoryNameSelected: string[];
 }
 
 const ID_CATEGORY_MEN = parseInt(process.env.NEXT_PUBLIC_ID_CAT_MEN || "");
@@ -37,7 +38,8 @@ const Loader = () => {
   );
 };
 
-const Menu = ({ data, onClick, parent, isFirstSubMenu }: MenuProps) => {
+const Menu = ({ data, onClick, parent, isFirstSubMenu, listCategoryNameSelected }: MenuProps) => {
+  const router = useRouter();
   const { data: dataIconShopAll } = useBlocks("jd-icon-menu-shop-all", true);
 
   const iconShopAll = useMemo(() => {
@@ -52,9 +54,20 @@ const Menu = ({ data, onClick, parent, isFirstSubMenu }: MenuProps) => {
     if (parent.id === ID_CATEGORY_KIDS) return listHomeBanners[2].file;
   }, [dataIconShopAll, parent, isFirstSubMenu]);
 
+  const handleClickShopAll = useCallback(() => {
+    const cloneListMenu = [...listCategoryNameSelected];
+    cloneListMenu.pop();
+
+    const url = generateCategoryURL(data?.name ?? "", data?.id ?? 0, cloneListMenu);
+    router.push(url);
+  }, [data, listCategoryNameSelected, router]);
+
   return (
     <div className="py-2 px-4">
-      <button className="py-2 w-full flex justify-between items-center">
+      <button
+        className="py-2 w-full flex justify-between items-center"
+        onClick={handleClickShopAll}
+      >
         <div className="flex items-center gap-2">
           {iconShopAll && (
             <Image
@@ -163,10 +176,8 @@ const OverlayMenuMobile = (props: OverlayMenuMobileProps) => {
   };
 
   const handleRedirect = (menu: RecursiveDataCategories) => {
-    console.log(
-      "🚀 ~ file: OverlayMenuMobile.tsx:161 ~ handleRedirect ~ menu:",
-      listCategoryNameSelected, menu.name
-    );
+    const url = generateCategoryURL(menu.name, menu.id, listCategoryNameSelected);
+    router.push(url);
   };
 
   const headerMenuRenderer = () => {
@@ -206,6 +217,7 @@ const OverlayMenuMobile = (props: OverlayMenuMobileProps) => {
           onClick={handleClickMenu}
           parent={parentCategory}
           isFirstSubMenu={currentMenu?.level === 3}
+          listCategoryNameSelected={listCategoryNameSelected}
         />
       );
     }
