@@ -13,6 +13,7 @@
     "@tanstack/react-query-devtools": "^4.2.1",
     "axios": "^1.6.1",
     "easy-peasy": "^6.0.4",
+    "framer-motion": "^10.16.4",
     "next": "14.0.1",
     "react": "^18",
     "react-dom": "^18",
