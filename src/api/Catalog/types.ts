@@ -1,0 +1,83 @@
+import { APIResponse } from "@/types/commonTypes";
+
+export type GetProductCatalogsResponse = APIResponse<GetProductCatalogListParams | null>;
+
+export type GetProductCatalogListParams = {
+  category: CatalogCategory | null;
+  items: Product[] | null;
+  total_count: number;
+};
+
+export type CatalogCategory = {
+  id: number;
+  name: string;
+  thumbnail: string;
+  description: string;
+  image: string;
+  meta_title: string;
+  meta_keywords: string;
+  meta_description: string;
+  display_mode: string;
+  landing_page: string;
+  is_anchor: string;
+  path: string;
+  custom_design: string;
+  children_count: string;
+  custom_use_parent_settings: string;
+  custom_apply_to_products: string;
+  url_key: string;
+  url_path: string;
+  automatic_sorting: string;
+  allow_compare: string;
+  landing_page_mobile: string;
+  show_onmobile_homepage: string;
+  show_icon_menu: string;
+  icon_menu: string;
+  icon_onmobile_homepage: string;
+  custom_attributes: any;
+};
+
+export type Product = {
+  id: number;
+  sku: string;
+  name: string;
+  attribute_set_id: number;
+  price: number;
+  min_price: number;
+  max_price: number;
+  status: number;
+  visibility: number;
+  type_id: string;
+  thumbnail: string;
+  preorder: number;
+  special_price: number;
+  url_key: string;
+  badge_o2o: number;
+  badge_bundling: number;
+  limited_product: number;
+  stock_status: number;
+  quantity_status: boolean;
+  quantity_and_stock_status: number;
+  special_price_as_cashback: number;
+  cashback: number;
+  short_description: string;
+  description: string;
+  product_brand: string;
+  site_code: string;
+  site_code_stock: string;
+  news_from_date_custom: string;
+  news_to_date_custom: string;
+  custom_badge: string;
+  custom_badge_from_date: string;
+  custom_badge_to_date: string;
+  category_id: any;
+  category: any;
+  jd_product_id: string;
+  badge_only_at_jd: number;
+  badge_exclusive_web: number;
+  badge_wellings_choice: number;
+  badge_best_seller: number;
+  badge_sustainable_materials: number;
+  effective_date: string;
+  expired_date: string;
+};

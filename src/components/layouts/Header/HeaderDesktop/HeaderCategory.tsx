@@ -7,46 +7,54 @@ import { USPBanner } from "./HeaderDesktop";
 import Masonry from "react-responsive-masonry";
 import BlocksView from "@/components/elements/BlocksView";
 import ContentLoader from "@/components/elements/ContentLoader";
+import { generateCategoryURL } from "@/utils/componentUtils";
 
-const ID_SALE_CATEGORY = parseInt(process.env.NEXT_PUBLIC_ID_CAT_SALE || "");
+const ID_SALE_CATEGORY = parseInt(process.env.NEXT_PUBLIC_ID_CAT_SALE ?? "");
 
 interface MenuProps {
   data: RecursiveDataCategories;
+  name: string[];
 }
 
-const Menu = ({ data }: MenuProps) => (
-  <>
-    <Link
-      href="#"
-      className={twMerge(
-        "hover:underline",
-        data.children_data.length > 0 ? "font-medium text-sm" : "text-xs"
-      )}
-    >
-      {data.name}
-    </Link>
+const Menu = ({ data, name }: MenuProps) => {
+  const clonedListName = [...name]
+  clonedListName.pop()
 
-    {data.children_data.length > 0 && (
-      <>
-        {data.children_data.map(item => (
-          <Menu key={item.id} data={item} />
-        ))}
-      </>
-    )}
-  </>
-);
+  const url = generateCategoryURL(data?.name, data?.id, clonedListName)
+  return (
+    <>
+      <Link
+        href={url}
+        className={twMerge(
+          "hover:underline",
+          data.children_data.length > 0 ? "font-medium text-sm" : "text-xs"
+        )}
+      >
+        {data.name}
+      </Link>
+
+      {data.children_data.length > 0 && (
+        <>
+          {data.children_data.map(item => (
+            <Menu key={item.id} data={item} name={[...name, item.name]} />
+          ))}
+        </>
+      )}
+    </>
+  );
+};
 
 const HeaderCategory = () => {
-  const [hoveredMenu, setHoveredMenu] = useState<number | null>(null);
+  const [hoveredMenu, setHoveredMenu] = useState<RecursiveDataCategories | null>(null);
 
   const { data, isError } = useCategories();
 
-  const dataCategories = useMemo(() => data?.data.children_data[0].children_data || [], [data]);
+  const dataCategories = useMemo(() => data?.data.children_data[0].children_data ?? [], [data]);
 
   const listSubMenu = useMemo(() => {
     if (!hoveredMenu) return null;
 
-    return dataCategories.find(item => item.id === hoveredMenu);
+    return dataCategories.find(item => item.id === hoveredMenu.id);
   }, [hoveredMenu, dataCategories]);
 
   if (isError || dataCategories.length === 0) return <></>;
@@ -62,7 +70,7 @@ const HeaderCategory = () => {
             e.stopPropagation();
 
             if (menu.children_data.length > 0) {
-              setHoveredMenu(menu.id);
+              setHoveredMenu(menu);
             } else {
               setHoveredMenu(null);
             }
@@ -73,7 +81,7 @@ const HeaderCategory = () => {
       ))}
       <div
         className={twMerge(
-          "absolute w-screen top-[54px] left-0 bg-white border-y border-gray-200",
+          "absolute w-screen top-[54px] left-0 bg-white border-y border-gray-200 z-[99]",
           hoveredMenu ? "block" : "hidden"
         )}
         onMouseLeave={() => setHoveredMenu(null)}
@@ -82,7 +90,7 @@ const HeaderCategory = () => {
           <Masonry className="!w-[70%] masonry" columnsCount={4}>
             {listSubMenu?.children_data.map(submenu => (
               <div key={submenu.id} className="flex flex-col gap-3 pl-7 mb-8">
-                <Menu data={submenu} />
+                <Menu data={submenu} name={[hoveredMenu?.name ?? "", submenu.name]} />
               </div>
             ))}
           </Masonry>
@@ -91,7 +99,7 @@ const HeaderCategory = () => {
             <p className="text-sm font-semibold">Featured</p>
             <BlocksView
               loadingComponent={<ContentLoader isRounded width="100%" height="400px" />}
-              identifier={`jd-cat-${hoveredMenu}-featured`}
+              identifier={`jd-cat-${hoveredMenu?.id}-featured`}
             />
           </div>
         </ContainerDesktop>

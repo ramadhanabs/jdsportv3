@@ -97,3 +97,12 @@ export const shimmer = (w: number, h: number) => `
   <rect id="r" width="${w}" height="${h}" fill="url(#g)" />
   <animate xlink:href="#r" attributeName="x" from="-${w}" to="${w}" dur="1s" repeatCount="indefinite"  />
 </svg>`;
+
+export const generateCategoryURL = (menu: string, menuId: number, listCategory: string[] = []) => {
+  const mergedMenu = `${makeUrlKey(menu)}-${menuId}`;
+  const cloneListCategory = [...listCategory]
+  cloneListCategory.push(mergedMenu);
+
+  const stringifiedListCategory = cloneListCategory.map(item => item.toLowerCase()).join("/");
+  return `/category/${stringifiedListCategory}`;
+};

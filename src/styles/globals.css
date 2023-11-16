@@ -24,3 +24,30 @@ input[type="number"] {
 .masonry > div {
   border-right: 1px solid rgb(229 231 235);
 }
+
+.slider-custom .slick-prev:before {
+  display: none;
+}
+
+.slider-custom .slick-prev {
+  left: 20px;
+  z-index: 20;
+}
+
+.slider-custom .slick-next:before {
+  display: none;
+  z-index: 20;
+}
+
+.slider-custom .slick-next {
+  right: 20px;
+}
+
+.slider-custom.offset-right .slick-next,
+.slider-custom.offset-right .slick-prev {
+  top: 45%;
+}
+
+.slider-custom.offset-right .slick-next {
+  right: 70px !important;
+}
