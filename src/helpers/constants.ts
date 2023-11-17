@@ -21,6 +21,7 @@ export const LAST_COMPLETED_ITEM_ID_REVIEW = "__lastCompletedItemIdReview";
 export const VIEW_CLEAR = "__viewClear";
 export const INITIAL_TIME_NPI = "__initialTime";
 export const IS_SHOW_TIMER = "__isShowTimer";
+export const IS_LOGIN = "__isLogin";
 
 type RoutePaths =
   | "login"
