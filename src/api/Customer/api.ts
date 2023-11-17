@@ -1,10 +1,24 @@
 import { BASIC_TOKEN } from "@/helpers/constants";
 import apiResolver from "../apiResolver";
 import getCustomAxios from "../customAxios";
-import { PostCustomerLoginResponse, PostLoginCustomerParams } from "./types";
+import {
+  GetErrorMessagesResponse,
+  Language,
+  PostCustomerLoginResponse,
+  PostLoginCustomerParams,
+} from "./types";
+
+const axios = getCustomAxios({
+  baseURL: `${process.env.NEXT_PUBLIC_CUSTOMERDB_HOST_API}/v1`,
+  config: {
+    isAuth: true,
+    includeDeviceInfo: true,
+    includeSource: true,
+  },
+});
 
 const axiosCustomer = getCustomAxios({
-  baseURL: `${process.env.NEXT_PUBLIC_CUSTOMERDB_HOST_API_KONG}/v2.1`,
+  baseURL: `${process.env.NEXT_PUBLIC_CUSTOMERDB_HOST_API}/v2.1`,
   config: {
     isAuth: true,
     includeDeviceInfo: true,
@@ -26,6 +40,16 @@ export const getCustomerProfile = async () => {
   return apiResolver(() => axiosCustomer.get("/profile"));
 };
 
+export const getErrorMessages = async (language: Language): Promise<GetErrorMessagesResponse> => {
+  return apiResolver(() =>
+    axios.get(`master/${language}/error-messages`, {
+      headers: {
+        Authorization: `Basic ${BASIC_TOKEN}`,
+      },
+    })
+  );
+};
+
 /* Post API */
 export const postLoginCustomer = async (
   param: PostLoginCustomerParams
@@ -39,4 +63,8 @@ export const postLoginCustomer = async (
       }),
     { throwErrorObject: true }
   );
+};
+
+export const postLogoutCustomer = async () => {
+  return apiResolver(() => axios.post("auth/logout"));
 };

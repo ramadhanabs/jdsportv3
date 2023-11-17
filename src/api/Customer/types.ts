@@ -1,25 +1,17 @@
 import { APIResponse } from "@/types/commonTypes";
 
-interface ResponseInfo {
-  appName: string;
-  build: string;
-  id: string;
-  message: string;
-  version: string;
-}
-
 export interface PostLoginCustomerParams {
   identifier: string;
   password: string;
   type: string;
 }
 
-export interface PostCustomerLoginResponse extends ResponseInfo {
-  data: {
-    token: string;
-    expired: number;
-  } | null;
-}
+export type LoginToken = {
+  token: string;
+  expired: number;
+};
+
+export type PostCustomerLoginResponse = APIResponse<LoginToken | null>;
 
 export type GetCustomerProfileResponse = APIResponse<Customer | null>;
 
@@ -71,3 +63,12 @@ interface Attributes {
   socialMedia: SocialMedia;
   completionStatus: CompletionStatus;
 }
+
+export type Language = "id" | "en";
+
+export type ErrorCode = {
+  code: string;
+  message: string;
+};
+
+export type GetErrorMessagesResponse = APIResponse<ErrorCode[]>;
