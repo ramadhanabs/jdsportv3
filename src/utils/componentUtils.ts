@@ -1,5 +1,7 @@
 /* eslint-disable no-bitwise */
 import { DeviceType } from "@/helpers/getDeviceType";
+import clsx, { ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 type ComponentLocator =
   | "@slider-desktop"
@@ -23,6 +25,10 @@ type ComponentLocator =
 export const getComponentLocatorId = (locator: ComponentLocator): ComponentLocator => {
   return locator;
 };
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
 
 export const downloadMobileApp = (deviceType: DeviceType, deepLink = true) => {
   if (deviceType === "ios") {
@@ -100,7 +106,7 @@ export const shimmer = (w: number, h: number) => `
 
 export const generateCategoryURL = (menu: string, menuId: number, listCategory: string[] = []) => {
   const mergedMenu = `${makeUrlKey(menu)}-${menuId}`;
-  const cloneListCategory = [...listCategory]
+  const cloneListCategory = [...listCategory];
   cloneListCategory.push(mergedMenu);
 
   const stringifiedListCategory = cloneListCategory.map(item => item.toLowerCase()).join("/");
