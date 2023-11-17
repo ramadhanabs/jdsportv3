@@ -44,9 +44,12 @@ const HeaderDesktop = () => {
           </div>
 
           <div className="flex items-center gap-4">
-            <p className="text-xs font-semibold">
-              Hi, {profile?.firstname} {profile?.lastname}
-            </p>
+            {profile && (
+              <p className="text-xs font-semibold">
+                Hi, {profile?.firstname} {profile?.lastname}
+              </p>
+            )}
+
             <Link className="text-xs font-semibold hover:underline" href={route("profile")}>
               My Account
             </Link>
