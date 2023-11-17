@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { StoreProvider } from "easy-peasy";
 import { store } from "@/store";
 import Viewport from "@/components/layouts/Viewport";
+import AuthContextProvider from "@/contexts/AuthContextProvider";
 
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
@@ -24,15 +25,17 @@ export default function App({ Component, pageProps }: AppProps) {
       <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
       <StoreProvider store={store}>
         <Viewport isMobile={isMobile} />
-        {isMobile ? (
-          <MobileAppLayout>
-            <Component {...pageProps} />
-          </MobileAppLayout>
-        ) : (
-          <DesktopAppLayout>
-            <Component {...pageProps} />
-          </DesktopAppLayout>
-        )}
+        <AuthContextProvider>
+          {isMobile ? (
+            <MobileAppLayout>
+              <Component {...pageProps} />
+            </MobileAppLayout>
+          ) : (
+            <DesktopAppLayout>
+              <Component {...pageProps} />
+            </DesktopAppLayout>
+          )}
+        </AuthContextProvider>
       </StoreProvider>
     </QueryClientProvider>
   );
