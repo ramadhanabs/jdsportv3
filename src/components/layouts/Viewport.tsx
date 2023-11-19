@@ -7,7 +7,7 @@ export default function Viewport(props: any) {
   const setDeviceIsMobile = useStoreActions(action => action.setDeviceIsMobile);
 
   useEffect(() => {
-    if (deviceIsMobile) setDeviceIsMobile(deviceIsMobile);
+    setDeviceIsMobile(deviceIsMobile);
   }, [deviceIsMobile, setDeviceIsMobile]);
 
   return <div></div>;
