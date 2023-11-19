@@ -52,6 +52,15 @@ input[type="number"] {
   right: 70px !important;
 }
 
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
 .box-shadow-login-form {
   box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175);
 }

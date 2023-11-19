@@ -7,6 +7,7 @@ import CartIcon from "@/components/icons/CartIcon";
 import UserIcon from "@/components/icons/UserIcon";
 import useDisclosure from "@/hooks/useDisclosure";
 import OverlayMenuMobile from "./OverlayMenuMobile";
+import SuggestionSearchView from "@/components/views/SuggestionSearchView";
 import { useRouter } from "next/router";
 import { route } from "@/utils/routes";
 import Link from "next/link";
@@ -28,9 +29,7 @@ const HeaderMobile = () => {
           <GiHamburgerMenu className="w-[22px] h-[22px]" />
           <p className="text-[7px]">MENU</p>
         </button>
-        <button className="p-2">
-          <FiSearch className="w-[22px] h-[22px]" />
-        </button>
+        <SuggestionSearchView />
       </div>
 
       <Link href={route("home")} className="flex items-center justify-center">
