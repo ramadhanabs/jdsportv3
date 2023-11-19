@@ -12,6 +12,7 @@ export interface APIResponse<T> {
   status: number;
   message?: string;
   errors_checkout?: ErrorCheckoutMessage[];
+  errorCode?: string;
 }
 
 export interface CategoryResponseType {

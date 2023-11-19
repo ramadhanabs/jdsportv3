@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { FiSearch } from "react-icons/fi";
@@ -8,9 +8,20 @@ import UserIcon from "@/components/icons/UserIcon";
 import useDisclosure from "@/hooks/useDisclosure";
 import OverlayMenuMobile from "./OverlayMenuMobile";
 import SuggestionSearchView from "@/components/views/SuggestionSearchView";
+import { useRouter } from "next/router";
+import { route } from "@/utils/routes";
+import Link from "next/link";
+import { useStoreState } from "@/store";
 
 const HeaderMobile = () => {
+  const { isLogin } = useStoreState(state => state);
+  const router = useRouter();
   const { isOpen, onClose, onOpen } = useDisclosure();
+
+  useEffect(() => {
+    onClose();
+  }, [router.pathname]);
+
   return (
     <div className="h-[54px] grid grid-cols-3 px-2 bg-white fixed top-0 right-0 w-full">
       <div className="flex items-center">
@@ -21,17 +32,17 @@ const HeaderMobile = () => {
         <SuggestionSearchView />
       </div>
 
-      <div className="flex items-center justify-center">
+      <Link href={route("home")} className="flex items-center justify-center">
         <Image src="/images/logo-jdsport.webp" width={136} height={20} alt="Logo JDSport 2023" />
-      </div>
+      </Link>
 
       <div className="flex items-center justify-end">
-        <button className="p-2">
+        <Link href={isLogin ? route("favorit") : route("login")} className="p-2">
           <AiOutlineHeart className="w-[22px] h-[22px]" />
-        </button>
-        <button className="p-2">
+        </Link>
+        <Link href={isLogin ? route("profile") : route("login")} className="p-2">
           <UserIcon className="w-[22px] h-[22px]" />
-        </button>
+        </Link>
 
         <div className="relative">
           <button className="p-2">
@@ -44,7 +55,7 @@ const HeaderMobile = () => {
         </div>
       </div>
 
-      {isOpen && <OverlayMenuMobile onClose={onClose} />}
+      <OverlayMenuMobile isOpen={isOpen} onClose={onClose} />
     </div>
   );
 };

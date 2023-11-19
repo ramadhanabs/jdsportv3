@@ -11,12 +11,7 @@ interface FooterProps {
 }
 
 const Newsletter = () => {
-  const {
-    handleSubmit,
-    register,
-    watch,
-    formState: { errors },
-  } = useForm<{ email: string }>({
+  const { handleSubmit, register } = useForm<{ email: string }>({
     mode: "onChange",
   });
 

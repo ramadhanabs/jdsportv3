@@ -1,6 +1,6 @@
 import { RecursiveDataCategories, useCategories } from "@/api/Categories";
 import HomeIcon from "@/components/icons/HomeIcon";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { Fragment, useCallback, useMemo, useState } from "react";
 import { HiOutlineX, HiChevronRight, HiArrowLeft } from "react-icons/hi";
 import { FaTwitter, FaFacebook } from "react-icons/fa";
 import { BsInstagram } from "react-icons/bs";
@@ -10,8 +10,14 @@ import { generateCategoryURL, shimmer, toBase64 } from "@/utils/componentUtils";
 import { useBlocks } from "@/api/Blocks";
 import { twMerge } from "tailwind-merge";
 import ContentLoader from "@/components/elements/ContentLoader";
+import { useCustomerProfile } from "@/api/Customer";
+import Link from "next/link";
+import { route } from "@/utils/routes";
+import { useAuthContext } from "@/contexts/AuthContextProvider";
+import { Dialog, Transition } from "@headlessui/react";
 
 interface OverlayMenuMobileProps {
+  isOpen: boolean;
   onClose: () => void;
 }
 
@@ -131,7 +137,11 @@ const Breadcrumb = ({ list }: { list: RecursiveDataCategories[] }) => {
 };
 
 const OverlayMenuMobile = (props: OverlayMenuMobileProps) => {
-  const { onClose } = props;
+  const { data: dataProfile } = useCustomerProfile();
+  const profile = dataProfile?.data;
+  const { logout } = useAuthContext();
+
+  const { onClose, isOpen } = props;
   const router = useRouter();
 
   const [listMenuSelected, setListMenuSelected] = useState<RecursiveDataCategories[]>([]);
@@ -251,41 +261,80 @@ const OverlayMenuMobile = (props: OverlayMenuMobileProps) => {
   };
 
   return (
-    <div className="fixed top-0 left-0 w-full overflow-y-scroll h-screen bg-white">
-      {headerMenuRenderer()}
-      {/* List Menu */}
-      {listMenuRenderer()}
+    <Transition
+      show={isOpen}
+      enter="transition duration-100 ease-out"
+      enterFrom="transform scale-95 opacity-0"
+      enterTo="transform scale-100 opacity-100"
+      leave="transition duration-75 ease-out"
+      leaveFrom="transform scale-100 opacity-100"
+      leaveTo="transform scale-95 opacity-0"
+      as={Fragment}
+    >
+      <Dialog open={isOpen} onClose={onClose} className="w-full fixed top-0" static>
+        <div className="overflow-y-scroll h-screen bg-white">
+          {headerMenuRenderer()}
+          {/* List Menu */}
+          {listMenuRenderer()}
 
-      <div className="p-2">
-        <button className="w-full border-t border-gray-200 py-4 px-2 flex justify-between items-center">
-          <p className="text-xs">My Account</p>
-          <HiChevronRight className="w-5 h-5" />
-        </button>
-        <button className="w-full border-t border-gray-200 py-4 px-2 flex justify-between items-center">
-          <p className="text-xs">MyEraspace</p>
-          <HiChevronRight className="w-5 h-5" />
-        </button>
-        <button className="w-full border-t border-gray-200 py-4 px-2 flex justify-between items-center">
-          <p className="text-xs">Help & Contact Us</p>
-          <HiChevronRight className="w-5 h-5" />
-        </button>
-        <button className="w-full border-y border-gray-200 py-4 px-2 flex justify-between items-center">
-          <p className="text-xs">Keluar</p>
-        </button>
-      </div>
+          <div className="p-2">
+            {profile ? (
+              <Link
+                href={route("profile")}
+                className="w-full border-t border-gray-200 py-4 px-2 flex justify-between items-center"
+              >
+                <p className="text-xs">My Account</p>
+                <HiChevronRight className="w-5 h-5" />
+              </Link>
+            ) : (
+              <Link
+                href={route("login")}
+                className="w-full border-t border-gray-200 py-4 px-2 flex justify-between items-center"
+              >
+                <p className="text-xs">Login</p>
+                <HiChevronRight className="w-5 h-5" />
+              </Link>
+            )}
 
-      <div className="flex justify-center items-center py-6 gap-10">
-        <button>
-          <FaFacebook className="w-8 h-8"></FaFacebook>
-        </button>
-        <button>
-          <BsInstagram className="w-8 h-8"></BsInstagram>
-        </button>
-        <button>
-          <FaTwitter className="w-8 h-8"></FaTwitter>
-        </button>
-      </div>
-    </div>
+            <Link
+              href="https://eraspace.com/myeraspace"
+              className="w-full border-t border-gray-200 py-4 px-2 flex justify-between items-center"
+            >
+              <p className="text-xs">MyEraspace</p>
+              <HiChevronRight className="w-5 h-5" />
+            </Link>
+            <Link
+              href={route("hubungi_kami")}
+              className="w-full border-t border-gray-200 py-4 px-2 flex justify-between items-center"
+            >
+              <p className="text-xs">Help & Contact Us</p>
+              <HiChevronRight className="w-5 h-5" />
+            </Link>
+
+            {profile && (
+              <button
+                className="w-full border-y border-gray-200 py-4 px-2 flex justify-between items-center"
+                onClick={logout}
+              >
+                <p className="text-xs">Keluar</p>
+              </button>
+            )}
+          </div>
+
+          <div className="flex justify-center items-center py-6 gap-10">
+            <button>
+              <FaFacebook className="w-8 h-8"></FaFacebook>
+            </button>
+            <button>
+              <BsInstagram className="w-8 h-8"></BsInstagram>
+            </button>
+            <button>
+              <FaTwitter className="w-8 h-8"></FaTwitter>
+            </button>
+          </div>
+        </div>
+      </Dialog>
+    </Transition>
   );
 };
 
